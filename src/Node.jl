@@ -1,0 +1,4 @@
+
+abstract type Node end
+
+
