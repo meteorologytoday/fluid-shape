@@ -9,7 +9,7 @@ mutable struct Node
 end
 
 function createVariableNode(id :: String)
-    return Node(id, NodeType["Variable"], nothing, Array{Node, 1}(undef, 0))
+    return Node(id, FluidShape.NodeType["Variable"], nothing, Array{Node, 1}(undef, 0))
 end
 
 function createOperatorNode(
@@ -26,4 +26,19 @@ function createOperatorNode(
     
 end
 
+
+AbstractTrees.children(node::Node) = node.inputs
+function AbstractTrees.printnode(io::IO, node::Node)
+    local full_name
+
+    if node.ntype == FluidShape.NodeType["Variable"]
+        full_name = @sprintf("%s", node.id)
+    elseif node.ntype == FluidShape.NodeType["Operator"]
+        full_name = @sprintf("%s[%s]", node.id, node.op_name)
+    end
+    
+    print(io, full_name)
+end
+
+print_tree(node::Node) = AbstractTrees.print_tree(node)
 
